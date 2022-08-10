@@ -1,45 +1,44 @@
 // Setup empty JS object to act as endpoint for all routes
-projectData = {};
+let projectData = {};
 
-// Start up an instance of app
+// Express to run server and routes
 const express = require('express');
+// Start up an instance of app
 const app = express();
 
+
+/* Dependencies */
+const bodyParser = require('body-parser')
 /* Middleware*/
 //Here we are configuring express to use body-parser as middle-ware.
-const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Cors for cross origin allowance
 const cors = require('cors');
-const { request } = require('http');
 app.use(cors());
 
-// Port
 const port = 8000;
 
 // Initialize the main project folder
 app.use(express.static('website'));
 
 // Setup Server
-app.listen(port, listening)
+const server = app.listen(port, listening);
 
 function listening() {
-    console.log(`Server runs on: http://localhost:${port}`);
+    console.log("server running"); 
+    console.log(`running on localhost:${port}`);
 }
 
-// Respond with JS object when a GET request is made to the homepage (to get all the data by:  http://localhost:8000/all)
-app.get('/all', function(req, res){
-    res.send(projectData).status(200);
+// Get the data from the endpoint
+app.get('/all', function (request, response) {
+  response.send(projectData);
 });
 
-// To post data by: http://localhost:8000/postData
-app.post('/postData', function(req, res) {
-    projectData = {
-        date: request.body.date,
-        temp: request.body.temp,
-        content: request.body.content
-    }
-    res.send(projectData).status(200);
+// Post the data to the endpoint
+app.post('/addData', function (request, response){
+    const base = request.body;
+    projectData = base;
+    response.send(projectData);
 });
